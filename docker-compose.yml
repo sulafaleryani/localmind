@@ -1,0 +1,17 @@
+services:
+  ollama:
+    image: ollama/ollama
+    ports: ["11434:11434"]
+    volumes: [ollama_models:/root/.ollama]
+  localmind:
+    build: .
+    depends_on: [ollama]
+    ports: ["8501:8501"]
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      CHROMA_DIR: /data/chroma
+    volumes: [localmind_data:/data, hf_cache:/app/.hf]
+volumes:
+  ollama_models:
+  localmind_data:
+  hf_cache:
